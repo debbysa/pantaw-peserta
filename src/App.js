@@ -1,26 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import axios from "axios";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Navigation from "./components/Navigation";
+import WorkshopInfo from "./components/WorkshopInfo";
+
+import TaskPage from "./pages/TaskPage";
+import PercakapanPage from "./pages/PercakapanPage";
+
+class App extends Component {
+  state = {
+    workshop: {
+      id_workshop: "",
+      judul: "",
+      deskripsi: ""
+    }
+  };
+
+  componentDidMount() {
+    axios
+      .get("http://localhost:3000/workshop/1")
+      .then(response => this.setState({ workshop: response.data }));
+  }
+
+  render() {
+    return (
+      <BrowserRouter>
+        <Navigation />
+        <WorkshopInfo workshop={this.state.workshop} />
+
+        <Route path="/" exact component={TaskPage} />
+        <Route path="/percakapan" component={PercakapanPage} />
+      </BrowserRouter>
+    );
+  }
 }
 
 export default App;

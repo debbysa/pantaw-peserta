@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Button from "../Button";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -6,19 +7,27 @@ export default class Navigation extends Component {
   render() {
     return (
       <Nav>
-        <Link to="/">
-          <NavItem>Task</NavItem>
-        </Link>
-        <Link to="/percakapan">
-          <NavItem>Percakapan</NavItem>
-        </Link>
+        <div>
+          <Link to="/">
+            <NavItem>Task</NavItem>
+          </Link>
+          <Link to="/percakapan">
+            <NavItem>Percakapan</NavItem>
+          </Link>
+        </div>
+
+        <Button
+          text="Logout"
+          onClick={() => this.props.onLogoutButtonClick()}
+        />
       </Nav>
     );
   }
 }
 
 const Nav = styled.div`
-  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
   border: 1px solid #ccc;
   background-color: #f1f1f1;
 `;

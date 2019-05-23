@@ -14,12 +14,15 @@ export default class TaskPage extends Component {
       durasi: 0,
       timer: 0
     },
-    id_status: 3 // sesuaikan dengan data ketika login
+    id_status: 3
   };
 
   socket = socketIOClient("http://localhost:3000");
+  detail_workshop = JSON.parse(localStorage.getItem("detail_workshop"));
 
   componentDidMount() {
+    this.setState({ id_status: this.detail_workshop.id_status });
+
     this.socket.on("task", task => {
       this.setState({ task });
     });
@@ -30,25 +33,28 @@ export default class TaskPage extends Component {
   }
 
   updateStatus(id_status) {
+    const { id_workshop, id_detail_workshop } = this.detail_workshop;
     axios
-      .put("http://localhost:3000/workshop/1/detail/3", { id_status })
+      .put(
+        `http://localhost:3000/workshop/${id_workshop}/detail/${id_detail_workshop}`,
+        { id_status }
+      )
       .then(response => {
         this.setState({ id_status });
-        this.socket.emit("detail", 1);
+        this.socket.emit("detail", id_workshop);
       });
   }
 
   render() {
+    const token = localStorage.getItem("token");
+    if (!token) window.location.replace("/login");
+
     return (
       <div>
         {this.state.task.start ? <Task task={this.state.task} /> : null}
 
         <div align="center">
-          <Button
-            disabled={this.state.id_status === 3}
-            onClick={() => this.updateStatus(3)}
-            text="Belum"
-          />
+          <Button onClick={() => this.updateStatus(3)} text="Belum" />
           <Button
             disabled={this.state.id_status === 2}
             onClick={() => this.updateStatus(2)}

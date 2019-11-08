@@ -5,11 +5,14 @@ import styled from "styled-components";
 
 import Button from "../../components/Button";
 import TextInput from "../../components/TextInput";
+import HelpModal from "../../components/HelpModal";
+import imgLogin from "../../assets/chat.jpeg";
 
 export default class PercakapanPage extends Component {
   state = {
     percakapan: [],
-    message: ""
+    message: "",
+    modalIsOpen: false
   };
 
   socket = socketIOClient("http://localhost:3000");
@@ -43,6 +46,18 @@ export default class PercakapanPage extends Component {
       });
   }
 
+  openModal = () => {
+    this.setState({
+      modalIsOpen: true
+    });
+  };
+
+  closeModal = () => {
+    this.setState({
+      modalIsOpen: false
+    });
+  };
+
   render() {
     const token = localStorage.getItem("token");
     if (!token) window.location.replace("/login");
@@ -52,6 +67,23 @@ export default class PercakapanPage extends Component {
 
     return (
       <Body>
+        <button
+          style={{
+            width: "100px",
+            padding: "10px",
+            border: "none"
+          }}
+          onClick={this.openModal}
+        >
+          help
+        </button>
+        <HelpModal
+          modalIsOpen={this.state.modalIsOpen}
+          closeModal={this.closeModal}
+        >
+          <img src={imgLogin} />
+        </HelpModal>
+
         <InputContainer>
           <TextInput
             label="Pesan"

@@ -5,6 +5,8 @@ import Button from "../../components/Button";
 
 import socketIOClient from "socket.io-client";
 import axios from "axios";
+import HelpModal from "../../components/HelpModal";
+import imgLogin from "../../assets/task.jpeg";
 
 export default class TaskPage extends Component {
   state = {
@@ -45,12 +47,39 @@ export default class TaskPage extends Component {
       });
   }
 
+  openModal = () => {
+    this.setState({
+      modalIsOpen: true
+    });
+  };
+
+  closeModal = () => {
+    this.setState({
+      modalIsOpen: false
+    });
+  };
+
   render() {
     const token = localStorage.getItem("token");
     if (!token) window.location.replace("/login");
 
     return (
       <div>
+        <button
+          style={{
+            padding: "10px",
+            border: "none"
+          }}
+          onClick={this.openModal}
+        >
+          help
+        </button>
+        <HelpModal
+          modalIsOpen={this.state.modalIsOpen}
+          closeModal={this.closeModal}
+        >
+          <img src={imgLogin} />
+        </HelpModal>
         {this.state.task.start ? <Task task={this.state.task} /> : null}
 
         <div align="center">

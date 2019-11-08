@@ -3,11 +3,14 @@ import TextInput from "../../components/TextInput";
 import Button from "../../components/Button";
 import axios from "axios";
 import socketIOClient from "socket.io-client";
+import HelpModal from "../../components/HelpModal";
+import imgLogin from "../../assets/login.jpeg";
 
 export default class Login extends Component {
   state = {
     id_workshop: "",
-    nama: ""
+    nama: "",
+    modalIsOpen: false
   };
 
   socket = socketIOClient("localhost:3000");
@@ -38,23 +41,59 @@ export default class Login extends Component {
       });
   }
 
+  openModal = () => {
+    this.setState({
+      modalIsOpen: true
+    });
+  };
+
+  closeModal = () => {
+    this.setState({
+      modalIsOpen: false
+    });
+  };
+
   render() {
     return (
       <div>
-        <h2>Login</h2>
-        <TextInput
-          label="Nama"
-          value={this.state.nama}
-          onChange={value => this.changeNama(value)}
-        />
+        <button
+          style={{
+            padding: "10px",
+            border: "none"
+          }}
+          onClick={this.openModal}
+        >
+          help
+        </button>
+        <HelpModal
+          modalIsOpen={this.state.modalIsOpen}
+          closeModal={this.closeModal}
+        >
+          <img src={imgLogin} />
+        </HelpModal>
+        <div
+          style={{
+            textAlign: "center",
+            display: "block",
+            width: "50%",
+            margin: "auto"
+          }}
+        >
+          <h2>Login</h2>
+          <TextInput
+            label="Nama"
+            value={this.state.nama}
+            onChange={value => this.changeNama(value)}
+          />
 
-        <TextInput
-          label="ID Workshop"
-          value={this.state.id_workshop}
-          onChange={value => this.changeIdWorkshop(value)}
-        />
+          <TextInput
+            label="ID Workshop"
+            value={this.state.id_workshop}
+            onChange={value => this.changeIdWorkshop(value)}
+          />
 
-        <Button text="Login" onClick={() => this.submitForm()} />
+          <Button text="Login" onClick={() => this.submitForm()} />
+        </div>
       </div>
     );
   }
